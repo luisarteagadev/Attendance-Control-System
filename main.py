@@ -12,8 +12,6 @@ class MainWindow(QMainWindow):
         self.ui = UI_MainWindow()
         self.ui.initializeUI(self)
         self.ui.sideBarIconsMenuWidget.hide()
-        self.ui.stackedWidget.setCurrentIndex(0)
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 

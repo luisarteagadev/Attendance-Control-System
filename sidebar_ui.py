@@ -2,12 +2,12 @@
 import sys
 from PyQt6.QtWidgets import (QApplication,QMainWindow,QWidget,
 QLabel, QGridLayout,QVBoxLayout , QHBoxLayout, QPushButton,QSpacerItem, QSizePolicy,
-QStackedWidget
+QStackedWidget, QMenu, QFrame
 
 )
 
 from PyQt6.QtCore import  QFile , QTextStream,QSize, Qt
-from PyQt6.QtGui import QPixmap, QIcon, QFont
+from PyQt6.QtGui import QPixmap, QIcon, QFont, QAction
 
 class UI_MainWindow(object):
     # def __init__(self):
@@ -40,17 +40,26 @@ class UI_MainWindow(object):
         self.headerIconsMenuLayout.addWidget(self.logoLabel1)
 
         self.bodyIconsMenuLayout=QVBoxLayout()
+
+
         self.bodyIconsMenuLayout.setSpacing(0)
-        self.homeButton1=QPushButton(self.sideBarIconsMenuWidget)
-        self.homeButton1.setText("")
+
+        # self.studentsButton1=QPushButton(self.sideBarIconsMenuWidget)
+        # self.studentsButton1.setText("")
+        # icon = QIcon()
+        # icon.addPixmap(QPixmap(":/icon/icon/home-4-32.ico"), QIcon.Mode.Normal, QIcon.State.Off)
+        # icon.addPixmap(QPixmap(":/icon/icon/home-4-48.ico"), QIcon.Mode.Normal, QIcon.State.On)
+        # self.studentsButton1.setIcon(icon)
+        # self.studentsButton1.setIconSize(QSize(20,20))
+        # self.studentsButton1.setCheckable(True)
+        # self.studentsButton1.setAutoExclusive(True)
+
+        self.studentsButton1= self.studentsUI_1()
+
         icon = QIcon()
         icon.addPixmap(QPixmap(":/icon/icon/home-4-32.ico"), QIcon.Mode.Normal, QIcon.State.Off)
         icon.addPixmap(QPixmap(":/icon/icon/home-4-48.ico"), QIcon.Mode.Normal, QIcon.State.On)
-        self.homeButton1.setIcon(icon)
-        self.homeButton1.setIconSize(QSize(20,20))
-        self.homeButton1.setCheckable(True)
-        self.homeButton1.setAutoExclusive(True)
-        self.bodyIconsMenuLayout.addWidget(self.homeButton1)
+        self.bodyIconsMenuLayout.addWidget(self.studentsButton1)
 
         self.dashboradButton1 = QPushButton(self.sideBarIconsMenuWidget)
         self.dashboradButton1.setText("")
@@ -142,12 +151,13 @@ class UI_MainWindow(object):
 
         self.bodyFullMenuLayout = QVBoxLayout()
         self.bodyFullMenuLayout.setSpacing(0)
-        self.homeButton2 = QPushButton(self.siderBarFullMenuWidget)
-        self.homeButton2.setIcon(icon)
-        self.homeButton2.setIconSize(QSize(14, 14))
-        self.homeButton2.setCheckable(True)
-        self.homeButton2.setAutoExclusive(True)        
-        self.bodyFullMenuLayout.addWidget(self.homeButton2)
+        
+    #---Intializing UI Elements---
+        self.studentsUI_2()
+    
+
+    #---END Intializing UI Elements
+        self.bodyFullMenuLayout.addWidget(self.studentsFrame)
 
         self.dashboradButton2 = QPushButton(self.siderBarFullMenuWidget)
         self.dashboradButton2.setIcon(icon1)
@@ -186,7 +196,7 @@ class UI_MainWindow(object):
         self.exitButton2.setIcon(icon5)
         self.exitButton2.setIconSize(QSize(14, 14))
 
-        self.siderBarFullMenuWidget.setFixedWidth(150)
+        self.siderBarFullMenuWidget.setFixedWidth(200)
         self.siderBarFullMenuLayout.addLayout(self.headerFullMenuLayout)
         self.siderBarFullMenuLayout.addLayout(self.bodyFullMenuLayout)
         self.siderBarFullMenuLayout.addItem(spacerItem2)
@@ -235,44 +245,23 @@ class UI_MainWindow(object):
 
         self.stackedWidget=QStackedWidget(self.mainContentAreaWidget)
 
-        self.page1= QWidget()
-        self.gridLayout_2 = QGridLayout(self.page1)
-        self.label4=QLabel(self.page1)
-        font=QFont()
-        font.setPointSize(20)
-        self.label4.setFont(font)
-        self.label4.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.gridLayout_2.addWidget(self.label4,0,0,1,1)
-        self.stackedWidget.addWidget(self.page1)
+    #---Initializing WidgetsUI to StackedWidget---
+        self.register_students_UI()
+        self.list_students_UI()
+        self.dashboard_students_UI()
+    #---END WidgetsUI to StackedWidget
+        self.stackedWidget.addWidget(self.registerStudentWidget)
+        self.stackedWidget.addWidget(self.listStudentsWidget)
+        self.stackedWidget.addWidget(self.dashboardStudentsWidget)
 
-        self.page2=QWidget()
-        self.gridLayout_3 = QGridLayout(self.page1)
-        self.label5=QLabel(self.page1)
-        font=QFont()
-        font.setPointSize(20)
-        self.label5.setFont(font)
-        self.label5.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.gridLayout_3.addWidget(self.label5,0,0,1,1)
-        self.stackedWidget.addWidget(self.page1)
+     
 
-        self.page3=QWidget()
-        self.gridLayout_3 = QGridLayout(self.page1)
-        self.label6=QLabel(self.page1)
-        font=QFont()
-        font.setPointSize(20)
-        self.label6.setFont(font)
-        self.label6.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.gridLayout_3.addWidget(self.label6,0,0,1,1)
-        self.stackedWidget.addWidget(self.page3)
+        self.stackedWidget.setCurrentIndex(0)
 
-
-        self.label4.setText("page 1")
-        self.label5.setText("page 2")
-        self.label6.setText("page 3")
 
         self.mainContentAreaLayout.addWidget(self.widget)
         self.mainContentAreaLayout.addWidget(self.stackedWidget)
-        
+
 
         self.gridLayout= QGridLayout(self.centralwidget)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
@@ -281,9 +270,143 @@ class UI_MainWindow(object):
         self.gridLayout.addWidget(self.siderBarFullMenuWidget,0,1,1,1)
         self.gridLayout.addWidget(self.mainContentAreaWidget,0,2,1,1)
         
-       
+    #---SETUP EVENTS---
         self.change_btn.toggled['bool'].connect(self.sideBarIconsMenuWidget.setVisible)
         self.change_btn.toggled['bool'].connect(self.siderBarFullMenuWidget.setHidden) 
-
         
+        self.menuStudentsButton.clicked.connect(self.toggle_students_menu)
+
+        self.registerStudentButton.clicked.connect(self.show_page_1)
+        self.listStudentButton.clicked.connect(self.show_page_2)
+        self.dashboardStudentButton.clicked.connect(self.show_page_3)
+
+    #---END SETUP EVENTS
+
+       
+        
+        
+
+    def studentsUI_1(self):
+        studentsButton1=QPushButton(self.sideBarIconsMenuWidget)
+        studentsButton1.setText("")
+        icon = QIcon()
+        icon.addPixmap(QPixmap(":/icon/icon/home-4-32.ico"), QIcon.Mode.Normal, QIcon.State.Off)
+        icon.addPixmap(QPixmap(":/icon/icon/home-4-48.ico"), QIcon.Mode.Normal, QIcon.State.On)
+        studentsButton1.setIcon(icon)
+        studentsButton1.setIconSize(QSize(20,20))
+        studentsButton1.setCheckable(True)
+        studentsButton1.setAutoExclusive(True)
+
+        return studentsButton1
+    
+   
+    def studentsUI_2(self):
+        
+        self.studentsFrame=QFrame(self.siderBarFullMenuWidget)
+        studentsLayout=QVBoxLayout()
+        self.studentsFrame.setLayout(studentsLayout)
+
+        self.menuStudentsButton = QPushButton()
+        self.menuStudentsButton.setText("Alumnos")
+        icon = QIcon()
+        icon.addPixmap(QPixmap(":/icon/icon/home-4-32.ico"), QIcon.Mode.Normal, QIcon.State.Off)
+        icon.addPixmap(QPixmap(":/icon/icon/home-4-48.ico"), QIcon.Mode.Normal, QIcon.State.On)
+        self.menuStudentsButton.setIcon(icon)
+        self.menuStudentsButton.setIconSize(QSize(14, 14))
+        self.menuStudentsButton.setCheckable(True)
+        self.menuStudentsButton.setAutoExclusive(True)  
+        studentsLayout.addWidget(self.menuStudentsButton)
+        
+        
+        self.studentsMenuFrame=QFrame(self.studentsFrame)
+        studentsMenuLayout=QVBoxLayout()
+        self.studentsMenuFrame.setLayout(studentsMenuLayout)
+        
+        self.registerStudentButton = QPushButton()
+        self.registerStudentButton.setText("Registrar Alumno")
+        icon = QIcon()
+        icon.addPixmap(QPixmap(":/icon/icon/home-4-32.ico"), QIcon.Mode.Normal, QIcon.State.Off)
+        icon.addPixmap(QPixmap(":/icon/icon/home-4-48.ico"), QIcon.Mode.Normal, QIcon.State.On)
+        self.registerStudentButton.setIcon(icon)
+        self.registerStudentButton.setIconSize(QSize(14, 14))
+        self.registerStudentButton.setCheckable(True)
+        self.registerStudentButton.setAutoExclusive(True)  
+        studentsMenuLayout.addWidget(self.registerStudentButton)
+
+        self.listStudentButton = QPushButton()
+        self.listStudentButton.setText("Lista Alumnos")
+        icon = QIcon()
+        icon.addPixmap(QPixmap(":/icon/icon/home-4-32.ico"), QIcon.Mode.Normal, QIcon.State.Off)
+        icon.addPixmap(QPixmap(":/icon/icon/home-4-48.ico"), QIcon.Mode.Normal, QIcon.State.On)
+        self.listStudentButton.setIcon(icon)
+        self.listStudentButton.setIconSize(QSize(14, 14))
+        self.listStudentButton.setCheckable(True)
+        self.listStudentButton.setAutoExclusive(True)  
+        studentsMenuLayout.addWidget(self.listStudentButton)
+
+        self.dashboardStudentButton = QPushButton()
+        self.dashboardStudentButton.setText("Dashboard")
+        icon = QIcon()
+        icon.addPixmap(QPixmap(":/icon/icon/home-4-32.ico"), QIcon.Mode.Normal, QIcon.State.Off)
+        icon.addPixmap(QPixmap(":/icon/icon/home-4-48.ico"), QIcon.Mode.Normal, QIcon.State.On)
+        self.dashboardStudentButton.setIcon(icon)
+        self.dashboardStudentButton.setIconSize(QSize(14, 14))
+        self.dashboardStudentButton.setCheckable(True)
+        self.dashboardStudentButton.setAutoExclusive(True)  
+        studentsMenuLayout.addWidget(self.dashboardStudentButton)
+
+        studentsLayout.addWidget(self.studentsMenuFrame)
+
+    
+    def register_students_UI(self):
+        self.registerStudentWidget= QWidget()
+        # Crear un QLabel para el título
+        title_label = QLabel("Registrar Alumno")
+        title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Centrar el texto
+
+        # Crear un layout vertical y agregar el título
+        layout = QVBoxLayout()
+        layout.addWidget(title_label)
+
+        # Asignar el layout al widget
+        self.registerStudentWidget.setLayout(layout)
+
+    def list_students_UI(self):
+        self.listStudentsWidget= QWidget()
+        # Crear un QLabel para el título
+        title_label = QLabel("Lista Alumnos")
+        title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Centrar el texto
+
+        # Crear un layout vertical y agregar el título
+        layout = QVBoxLayout()
+        layout.addWidget(title_label)
+
+        # Asignar el layout al widget
+        self.listStudentsWidget.setLayout(layout)
+    
+    def dashboard_students_UI(self):
+        self.dashboardStudentsWidget= QWidget()
+        # Crear un QLabel para el título
+        title_label = QLabel("Dashboard Alumnos")
+        title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Centrar el texto
+
+        # Crear un layout vertical y agregar el título
+        layout = QVBoxLayout()
+        layout.addWidget(title_label)
+
+        # Asignar el layout al widget
+        self.dashboardStudentsWidget.setLayout(layout)
+        
+       
+        
+
+    def toggle_students_menu(self):
+        self.studentsMenuFrame.setVisible(not self.studentsMenuFrame.isVisible())
+     
+    def show_page_1(self):
+        self.stackedWidget.setCurrentIndex(0)
+    def show_page_2(self):
+        self.stackedWidget.setCurrentIndex(1)
+    def show_page_3(self):
+        self.stackedWidget.setCurrentIndex(2)
 import resource_rc
