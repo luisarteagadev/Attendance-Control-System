@@ -12,6 +12,7 @@ class MainWindow(QMainWindow):
         self.ui = UI_MainWindow()
         self.ui.initializeUI(self)
         self.ui.sideBarIconsMenuWidget.hide()
+        self.ui.init_menu_frames()
 if __name__ == "__main__":
     app = QApplication(sys.argv)
 
@@ -25,5 +26,5 @@ if __name__ == "__main__":
     app.setStyleSheet(style_stream.readAll())
 
     window = MainWindow()
-    window.show()
+    window.showMaximized()
     sys.exit(app.exec())
