@@ -1,10 +1,12 @@
 import sys
 from PyQt6.QtWidgets import QMainWindow, QApplication, QPushButton
 from PyQt6.QtCore import  QFile , QTextStream
-
 from sidebar_ui import UI_MainWindow
+
+evalua = True
+tipo = "administrador"
 class MainWindow(QMainWindow):
-    def __init__(self, evalua, tipo):
+    def __init__(self, evalua, tipo): # evalua, tipo
         super(MainWindow, self).__init__()
         self.ui = UI_MainWindow()
         self.ui.initializeUI(self)
@@ -16,6 +18,6 @@ if __name__ == "__main__":
     style_stream = QTextStream(style_file)
     app.setStyleSheet(style_stream.readAll())
 
-    window = MainWindow()
+    window = MainWindow(evalua, tipo)
     window.show()
     sys.exit(app.exec())
