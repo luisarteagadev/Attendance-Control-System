@@ -9,6 +9,7 @@ QStackedWidget, QMenu, QFrame
 from PyQt6.QtCore import  QFile , QTextStream,QSize, Qt
 from PyQt6.QtGui import QPixmap, QIcon, QFont, QAction
 
+from list_cursos_gui import ListCoursesWidget
 class UI_MainWindow(object):
     # def __init__(self):
     #     super().__init__()
@@ -29,7 +30,7 @@ class UI_MainWindow(object):
 
         self.sideBarIconsMenuLayout=QVBoxLayout(self.sideBarIconsMenuWidget)
         self.sideBarIconsMenuLayout.setContentsMargins(0, 0, 0, 0)
-        self.sideBarIconsMenuLayout.setSpacing(0)
+        self.sideBarIconsMenuLayout.setSpacing(5)
 
         self.headerIconsMenuLayout=QHBoxLayout()
         self.logoLabel1=QLabel(self.sideBarIconsMenuWidget)
@@ -509,17 +510,19 @@ class UI_MainWindow(object):
 
 
     def list_courses_UI(self):
-        self.list_courses_widget= QWidget()
+        
+        # self.list_courses_widget= QWidget()
+        self.list_courses_widget=ListCoursesWidget(self.stackedWidget)
         # Crear un QLabel para el título
-        title_label = QLabel("Lista Cursos")
-        title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Centrar el texto
+        #title_label = QLabel("Lista Cursos")
+        #title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Centrar el texto
 
         # Crear un layout vertical y agregar el título
-        layout = QVBoxLayout()
-        layout.addWidget(title_label)
+        #layout = QVBoxLayout()
+        #layout.addWidget(title_label)
 
         # Asignar el layout al widget
-        self.list_courses_widget.setLayout(layout)
+        #self.list_courses_widget.setLayout(layout)
     
 
     def toggle_students_menu(self):
