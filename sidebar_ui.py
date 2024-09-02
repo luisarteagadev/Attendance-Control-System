@@ -10,6 +10,7 @@ from PyQt6.QtCore import  QFile , QTextStream,QSize, Qt
 from PyQt6.QtGui import QPixmap, QIcon, QFont, QAction
 
 from list_cursos_gui import ListCoursesWidget
+from mant_clases_gui import MantClasesWidget
 class UI_MainWindow(object):
     # def __init__(self):
     #     super().__init__()
@@ -250,13 +251,13 @@ class UI_MainWindow(object):
 
     #---Initializing WidgetsUI to StackedWidget---
         self.register_students_UI()
-        self.register_teachers_UI()
+        self.mant_clases_UI()
         self.list_courses_UI()
         # self.list_students_UI()
         # self.dashboard_students_UI()
     #---END WidgetsUI to StackedWidget
         self.stackedWidget.addWidget(self.registerStudentWidget)
-        self.stackedWidget.addWidget(self.register_teacher_widget)
+        self.stackedWidget.addWidget(self.mant_clases_widget)
         self.stackedWidget.addWidget(self.list_courses_widget)
 
         # self.stackedWidget.addWidget(self.listStudentsWidget)
@@ -287,7 +288,7 @@ class UI_MainWindow(object):
         self.menu_courses_button.clicked.connect(self.toggle_courses_menu)
 
         self.registerStudentButton.clicked.connect(self.show_page_1)
-        self.register_teacher_button.clicked.connect(self.show_page_2)
+        self.mant_clases_button.clicked.connect(self.show_page_2)
         self.list_courses_button.clicked.connect(self.show_page_3)
 
     #---END SETUP EVENTS
@@ -414,7 +415,7 @@ class UI_MainWindow(object):
         self.teachers_frame.setLayout(teachersLayout)
 
         self.menu_teachers_button = QPushButton()
-        self.menu_teachers_button.setText("Profesores")
+        self.menu_teachers_button.setText("Administrador")
         icon = QIcon()
         icon.addPixmap(QPixmap(":/icon/icon/group-32.ico"), QIcon.Mode.Normal, QIcon.State.Off)
         icon.addPixmap(QPixmap(":/icon/icon/group-48.ico"), QIcon.Mode.Normal, QIcon.State.On)
@@ -429,16 +430,17 @@ class UI_MainWindow(object):
         teachersMenuLayout=QVBoxLayout()
         self.teachers_menu_frame.setLayout(teachersMenuLayout)
         
-        self.register_teacher_button = QPushButton()
-        self.register_teacher_button.setText("Registrar Profesor")
-        # icon = QIcon()
-        # icon.addPixmap(QPixmap(":/icon/icon/home-4-32.ico"), QIcon.Mode.Normal, QIcon.State.Off)
-        # icon.addPixmap(QPixmap(":/icon/icon/home-4-48.ico"), QIcon.Mode.Normal, QIcon.State.On)
-        # self.registerStudentButton.setIcon(icon)
-        # self.registerStudentButton.setIconSize(QSize(14, 14))
-        self.register_teacher_button.setCheckable(True)
-        self.register_teacher_button.setAutoExclusive(True)  
-        teachersMenuLayout.addWidget(self.register_teacher_button)
+        self.mant_clases_button = QPushButton()
+        self.mant_clases_button.setText("Mant. Clases")
+        self.mant_clases_button.setCheckable(True)
+        self.mant_clases_button.setAutoExclusive(True)  
+        teachersMenuLayout.addWidget(self.mant_clases_button)
+
+        self.mant_usuarios_button = QPushButton()
+        self.mant_usuarios_button.setText("Mant. Usuarios")
+        self.mant_usuarios_button.setCheckable(True)
+        self.mant_usuarios_button.setAutoExclusive(True) 
+        teachersMenuLayout.addWidget(self.mant_usuarios_button)
 
         # self.listStudentButton = QPushButton()
         # self.listStudentButton.setText("Lista Alumnos")
@@ -464,19 +466,9 @@ class UI_MainWindow(object):
 
         teachersLayout.addWidget(self.teachers_menu_frame)  
     
-    def register_teachers_UI(self):
-        self.register_teacher_widget= QWidget()
-        # Crear un QLabel para el título
-        title_label = QLabel("Registrar Profesor")
-        title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Centrar el texto
-
-        # Crear un layout vertical y agregar el título
-        layout = QVBoxLayout()
-        layout.addWidget(title_label)
-
-        # Asignar el layout al widget
-        self.register_teacher_widget.setLayout(layout)
-
+    def mant_clases_UI(self):
+        self.mant_clases_widget= MantClasesWidget()
+        
 
     def coursesUI_2(self):
         
@@ -510,19 +502,8 @@ class UI_MainWindow(object):
 
 
     def list_courses_UI(self):
-        
-        # self.list_courses_widget= QWidget()
         self.list_courses_widget=ListCoursesWidget(self.stackedWidget)
-        # Crear un QLabel para el título
-        #title_label = QLabel("Lista Cursos")
-        #title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)  # Centrar el texto
-
-        # Crear un layout vertical y agregar el título
-        #layout = QVBoxLayout()
-        #layout.addWidget(title_label)
-
-        # Asignar el layout al widget
-        #self.list_courses_widget.setLayout(layout)
+       
     
 
     def toggle_students_menu(self):

@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (QApplication, QWidget, QLabel,
     QHBoxLayout, QVBoxLayout)
 from students_list_gui import StudentsListWidget
 from attendance_gui import AttendanceWidget
+from dashboard_gui import DashboardWidget
 class MenuTabsWidget(QWidget):
 
     def __init__(self):
@@ -32,7 +33,7 @@ class MenuTabsWidget(QWidget):
         #self.students_list_tab = QWidget()
         self.students_list_tab=StudentsListWidget()
         self.attendance_tab = AttendanceWidget()
-        self.dashboard_tab=QWidget()
+        self.dashboard_tab=DashboardWidget()
 
         tab_bar.addTab(self.students_list_tab, "Alumnos")
         tab_bar.addTab(self.attendance_tab, "Asistencia")

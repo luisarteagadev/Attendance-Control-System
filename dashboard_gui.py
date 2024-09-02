@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import numpy as np
-
+import pandas as pd
 class DashboardWidget(QWidget):
     def __init__(self):
         super().__init__()
@@ -20,7 +20,7 @@ class DashboardWidget(QWidget):
         main_layout.addWidget(monthly_attendance_frame, 0, 0)
 
         # Sección de Group Name (gráfico de pastel)
-        group_name_frame = self.create_frame_with_chart("Group Name", "Selecciona Opción", ["Opción 1", "Opción 2"], self.create_pie_chart())
+        group_name_frame = self.create_frame_with_chart("Porcentaje de Asistencia por alumno", "Selecciona Alumno", ["Opción 1", "Opción 2"], self.create_pie_chart())
         main_layout.addWidget(group_name_frame, 0, 1)
 
         # Sección de Tendencia de Ausentismo
@@ -39,9 +39,7 @@ class DashboardWidget(QWidget):
         frame.setLineWidth(2)
 
         layout = QVBoxLayout()
-
         title_label = QLabel(title)
-        title_label.setAlignment(Qt.AlignmentFlag.AlignLeft)
         layout.addWidget(title_label)
 
         select_layout = QHBoxLayout()
@@ -74,22 +72,26 @@ class DashboardWidget(QWidget):
         select_layout.addWidget(select_label)
         select_layout.addWidget(combo_box)
         layout.addLayout(select_layout)
-
         layout.addWidget(chart_widget)
+
+        layout.addStretch()
         frame.setLayout(layout)
         return frame
 
     def create_line_chart(self):
         figure = Figure(figsize=(3, 2))
         canvas = FigureCanvas(figure)
+        data = {'Fecha': ['Enero-S01', 'Enero-S02', 'Enero-S03', 'Enero-S04', 'Enero-S05'],
+        'Ausencias': [1, 1,3, 2, 4 ]}
+        df = pd.DataFrame(data)
         ax = figure.add_subplot(111)
         
-        x = np.arange(1, 11)
-        y1 = np.random.randint(1, 10, 10)
-        y2 = np.random.randint(1, 10, 10)
+        x = df['Fecha']
+        y=df['Ausencias']
+       
 
-        ax.plot(x, y1, label="Año anterior", color='gray', linewidth=2, alpha=0.6)
-        ax.plot(x, y2, label="Este año", color='black', linewidth=2)
+        ax.plot(x,y, label="Numero de Ausencias", color='skyblue', linewidth=2, alpha=0.6)
+        # ax.plot(x, y2, label="Semana", color='black', linewidth=2)
         ax.set_title("Tendencias de Ausentismo")
         ax.legend()
 
@@ -100,20 +102,36 @@ class DashboardWidget(QWidget):
         canvas = FigureCanvas(figure)
         ax = figure.add_subplot(111)
 
-        categories = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo']
-        values1 = np.random.randint(1, 10, len(categories))
-        values2 = np.random.randint(1, 10, len(categories))
+        # Datos de ejemplo
+        data = {'Fecha': ['2024-08-01', '2024-08-02', '2024-08-03', '2024-08-04', '2024-08-05',
+                        '2024-08-01', '2024-08-07', '2024-08-08', '2024-08-09', '2024-08-10',
+                        '2024-08-11', '2024-08-11', '2024-08-12', '2024-08-12']}
 
-        bar_width = 0.35
-        index = np.arange(len(categories))
-        ax.bar(index, values1, bar_width, label='Año anterior', color='gray', alpha=0.6)
-        ax.bar(index + bar_width, values2, bar_width, label='Este año', color='black')
-        ax.set_xlabel('Mes')
-        ax.set_ylabel('Cantidad')
-        ax.set_title('Patrones de Tardanza')
-        ax.set_xticks(index + bar_width / 2)
-        ax.set_xticklabels(categories)
-        ax.legend()
+        df = pd.DataFrame(data)
+        df['Fecha'] = pd.to_datetime(df['Fecha'])
+
+        # Crear la columna 'Día de la Semana' basada en 'Fecha'
+        df['Día de la Semana'] = df['Fecha'].dt.day_name()
+
+        # Mapeo de nombres completos a siglas
+        day_abbr = {
+        'Monday': 'Lun',
+        'Tuesday': 'Mar',
+        'Wednesday': 'Mié',
+        'Thursday': 'Jue',
+        'Friday': 'Vie',
+        'Saturday': 'Sáb',
+        'Sunday': 'Dom'
+     }
+
+        # Contar el número de tardanzas por día de la semana
+        conteo_tardanzas = df['Día de la Semana'].map(day_abbr).value_counts().reindex(['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'], fill_value=0)
+
+        # Crear gráfico de barras
+        ax.bar(conteo_tardanzas.index, conteo_tardanzas.values, color='skyblue')
+        ax.set_ylabel('Número de Tardanzas')
+        ax.set_xlabel('Día de la Semana')
+        ax.set_title('Patrón de Tardanza Mensual según Día de la Semana')
 
         return canvas
 
@@ -124,13 +142,9 @@ class DashboardWidget(QWidget):
 
         sizes = [20, 30, 50]
         labels = ['Parte A', 'Parte B', 'Parte C']
-        ax.pie(sizes, labels=labels, colors=['gray', 'darkgray', 'lightgray'], startangle=90, autopct='%1.1f%%')
+        ax.pie(sizes, labels=labels, colors=['#6699CC', '#336699', '#99CCFF'], startangle=90, autopct='%1.1f%%')
         ax.set_title("Distribución de Grupo")
 
         return canvas
 
-# Ejecución de la aplicación
-app = QApplication([])
-window = DashboardWidget()
-window.show()
-app.exec()
+
