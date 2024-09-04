@@ -17,5 +17,6 @@
     <file>icon/product-48.ico</file>
     <file>icon/search-13-48.ico</file>
     <file>icon/user-48.ico</file>
+    <file>icon/gear_icon.ico</file>
   </qresource>
 </RCC>

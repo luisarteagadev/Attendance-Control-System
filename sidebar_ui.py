@@ -2,7 +2,7 @@
 import sys
 from PyQt6.QtWidgets import (QApplication,QMainWindow,QWidget,
 QLabel, QGridLayout,QVBoxLayout , QHBoxLayout, QPushButton,QSpacerItem, QSizePolicy,
-QStackedWidget, QMenu, QFrame
+QStackedWidget, QMenu, QFrame,QDialog
 
 )
 
@@ -11,6 +11,8 @@ from PyQt6.QtGui import QPixmap, QIcon, QFont, QAction
 
 from list_cursos_gui import ListCoursesWidget
 from mant_clases_gui import MantClasesWidget
+from mant_usuarios_gui import MantUsuariosWidget
+from config_diaglo_gui import ConfigDialog
 class UI_MainWindow(object):
     # def __init__(self):
     #     super().__init__()
@@ -41,6 +43,7 @@ class UI_MainWindow(object):
         self.logoLabel1.setPixmap(QPixmap(":/icon/icon/Logo.png"))
         self.logoLabel1.setScaledContents(True)
         self.headerIconsMenuLayout.addWidget(self.logoLabel1)
+
 
         self.bodyIconsMenuLayout=QVBoxLayout()
 
@@ -144,10 +147,12 @@ class UI_MainWindow(object):
         self.logoLabel2.setScaledContents(True)
         self.headerFullMenuLayout.addWidget(self.logoLabel2)
 
+
         self.logoLabel3 = QLabel(self.siderBarFullMenuWidget)
         font = QFont()
         font.setPointSize(15)
         self.logoLabel3.setFont(font)
+        self.logoLabel3.setText("Esan School")
         self.headerFullMenuLayout.addWidget(self.logoLabel3)
 
         
@@ -238,13 +243,23 @@ class UI_MainWindow(object):
         spacerItem3 = QSpacerItem(236, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         self.headerMainContentLayout.addItem(spacerItem3)
 
+        self.config_btn=QPushButton(self.mainContentAreaWidget)
+        self.config_btn.setText("")
+        icon7 = QIcon()
+        icon7.addPixmap(QPixmap(":/icon/icon/gear_icon.ico"), QIcon.Mode.Normal, QIcon.State.Off)
+        self.config_btn.setIcon(icon7)
+        self.config_btn.setObjectName("config_btn")
+        self.config_btn.setIconSize(QSize(24, 24))
+
+        self.headerMainContentLayout.addWidget(self.config_btn)
+
 
         self.user_btn = QPushButton(self.mainContentAreaWidget)
         self.user_btn.setText("")
         icon8 = QIcon()
         icon8.addPixmap(QPixmap(":/icon/icon/user-48.ico"), QIcon.Mode.Normal, QIcon.State.Off)
-        self.user_btn.setIcon(icon8)
-        self.user_btn.setObjectName("user_btn")
+        self.user_btn.setIcon(icon8) 
+        self.user_btn.setIconSize(QSize(24, 24))
         self.headerMainContentLayout.addWidget(self.user_btn)
 
         self.stackedWidget=QStackedWidget(self.mainContentAreaWidget)
@@ -252,12 +267,14 @@ class UI_MainWindow(object):
     #---Initializing WidgetsUI to StackedWidget---
         self.register_students_UI()
         self.mant_clases_UI()
+        self.mant_usuarios_UI()
         self.list_courses_UI()
         # self.list_students_UI()
         # self.dashboard_students_UI()
     #---END WidgetsUI to StackedWidget
         self.stackedWidget.addWidget(self.registerStudentWidget)
         self.stackedWidget.addWidget(self.mant_clases_widget)
+        self.stackedWidget.addWidget(self.mant_usuarios_widget)
         self.stackedWidget.addWidget(self.list_courses_widget)
 
         # self.stackedWidget.addWidget(self.listStudentsWidget)
@@ -282,20 +299,27 @@ class UI_MainWindow(object):
     #---SETUP EVENTS---
         self.change_btn.toggled['bool'].connect(self.sideBarIconsMenuWidget.setVisible)
         self.change_btn.toggled['bool'].connect(self.siderBarFullMenuWidget.setHidden) 
-        
+        self.config_btn.clicked.connect(self.show_config_dialog)
+
+
         self.menuStudentsButton.clicked.connect(self.toggle_students_menu)
         self.menu_teachers_button.clicked.connect(self.toggle_teachers_menu)
         self.menu_courses_button.clicked.connect(self.toggle_courses_menu)
 
         self.registerStudentButton.clicked.connect(self.show_page_1)
         self.mant_clases_button.clicked.connect(self.show_page_2)
-        self.list_courses_button.clicked.connect(self.show_page_3)
+        self.mant_usuarios_button.clicked.connect(self.show_page_3)
+        self.list_courses_button.clicked.connect(self.show_page_4)
 
     #---END SETUP EVENTS
 
        
         
+    def show_config_dialog(self):
+        dialog = ConfigDialog()
+        dialog.exec()
         
+     
 
     def studentsUI_1(self):
         studentsButton1=QPushButton(self.sideBarIconsMenuWidget)
@@ -468,7 +492,9 @@ class UI_MainWindow(object):
     
     def mant_clases_UI(self):
         self.mant_clases_widget= MantClasesWidget()
-        
+
+    def mant_usuarios_UI(self):
+        self.mant_usuarios_widget=MantUsuariosWidget()
 
     def coursesUI_2(self):
         
@@ -526,4 +552,6 @@ class UI_MainWindow(object):
         self.stackedWidget.setCurrentIndex(1)
     def show_page_3(self):
         self.stackedWidget.setCurrentIndex(2)
+    def show_page_4(self):
+        self.stackedWidget.setCurrentIndex(3)
 import resource_rc
